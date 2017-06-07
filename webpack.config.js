@@ -1,30 +1,29 @@
-var path = require('path')
+// webpack.config.js
+const webpack = require('webpack')
+const path = require('path')
 
-module.exports = {
-  // context: __dirname,
-  entry: {
-    app: ['./src/index.js']
-  },
+const config = {
+  context: path.resolve(__dirname, 'src'),
+  entry: './app.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: 'dist/',
     filename: 'bundle.js'
   },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000
-  },
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: [/node_modules/],
+    rules: [{
+      test: /\.js$/,
+      include: path.resolve(__dirname, 'src'),
+      use: [{
         loader: 'babel-loader',
-        query: {
-          presets: ['env']
-        },
-        include: [path.join(__dirname, 'src')]
-      }
-    ]
+        options: {
+          presets: [
+            ['es2015', { modules: false }]
+          ]
+        }
+      }]
+    }]
   }
 }
+
+module.exports = config
